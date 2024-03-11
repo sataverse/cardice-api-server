@@ -1,0 +1,232 @@
+[
+    {
+        "id" : 0,
+        "email" : "master@gmail.com",
+        "password" : "1234",
+        "nickname" : "마스터",
+        "grade" : 0,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 1,
+        "email" : "manager@gmail.com",
+        "password" : "0000",
+        "nickname" : "매니저",
+        "grade" : 1,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 2,
+        "email" : "khs@gmail.com",
+        "password" : "12345",
+        "nickname" : "김현수",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    }, 
+    {
+        "id" : 3,
+        "email" : "skullking@gmail.com",
+        "password" : "0000",
+        "nickname" : "스컬킹",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 4,
+        "email" : "dixit@gmail.com",
+        "password" : "0000",
+        "nickname" : "딕싯",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 5,
+        "email" : "avalon@gmail.com",
+        "password" : "0000",
+        "nickname" : "아발론",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 6,
+        "email" : "lexio@gmail.com",
+        "password" : "0000",
+        "nickname" : "렉시오",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 7,
+        "email" : "citadels@gmail.com",
+        "password" : "0000",
+        "nickname" : "시타델",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 8,
+        "email" : "kraken@gmail.com",
+        "password" : "0000",
+        "nickname" : "크라켄",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 9,
+        "email" : "yahtzee@gmail.com",
+        "password" : "0000",
+        "nickname" : "요트다이스",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 10,
+        "email" : "abraca@gmail.com",
+        "password" : "0000",
+        "nickname" : "아브라카왓",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 11,
+        "email" : "cascadia@gmail.com",
+        "password" : "0000",
+        "nickname" : "캐스캐디아",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 12,
+        "email" : "rummikub@gmail.com",
+        "password" : "0000",
+        "nickname" : "루미큐브",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 13,
+        "email" : "camelup@gmail.com",
+        "password" : "0000",
+        "nickname" : "카멜업",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 14,
+        "email" : "werewolf@gmail.com",
+        "password" : "0000",
+        "nickname" : "늑대인간",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 15,
+        "email" : "lasvegas@gmail.com",
+        "password" : "0000",
+        "nickname" : "라스베가스",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 16,
+        "email" : "saboteur@gmail.com",
+        "password" : "0000",
+        "nickname" : "사보타지",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 17,
+        "email" : "dalmuti@gmail.com",
+        "password" : "0000",
+        "nickname" : "달무티",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 18,
+        "email" : "bohnanza@gmail.com",
+        "password" : "0000",
+        "nickname" : "보난자",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 19,
+        "email" : "modernart@gmail.com",
+        "password" : "0000",
+        "nickname" : "모던아트",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 20,
+        "email" : "catan@gmail.com",
+        "password" : "0000",
+        "nickname" : "카탄",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 21,
+        "email" : "tichu@gmail.com",
+        "password" : "0000",
+        "nickname" : "티츄",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    },
+    {
+        "id" : 22,
+        "email" : "quacks@gmail.com",
+        "password" : "0000",
+        "nickname" : "돌팔이",
+        "grade" : 2,
+        "like" : [],
+        "review" : [],
+        "post" :[]
+    }
+]
