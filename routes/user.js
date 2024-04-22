@@ -1,4 +1,3 @@
-const path = './public/json/user.json';
 const fs = require('fs/promises');
 const bcrypt = require('bcrypt');
 const util = require('../util');
@@ -8,7 +7,7 @@ var router = express.Router();
 router.get('/', (req, res, next) => {
   let id = parseInt(req.query.id);
 
-  fs.readFile(path, { encoding: 'utf-8', flag: 'r' })
+  fs.readFile(util.pathUser, { encoding: 'utf-8', flag: 'r' })
   .then(data => JSON.parse(data).data.find(item => item.id === id))
   .then(data => {
     const { password, ...otherData } = data;
@@ -23,23 +22,21 @@ router.get('/', (req, res, next) => {
       error
     }));
   })
-
-  /*
-  fs.readFile(path, { encoding: 'utf-8', flag: 'r' })
-  .then(data => JSON.parse(data).data.find(item => item.id === id))
-  .then(data => bcrypt.hash(data.password, 10))
-  .then(password => bcrypt.compare(passwd, password))
-  .then(correct => console.log(correct))
-  */
 });
 
 router.post('/signin', (req, res, next) => {
-  let emailReq = req.body.email;
-  let passwordReq = req.body.password;
+  let {token, email : emailReq, password : passwordReq} = req.body;
+
+  if(token !== util.token) {
+    res.send(JSON.stringify({
+      code : 403
+    }));
+    return;
+  }
 
   ( async () => {
     try {
-      const fileData = await fs.readFile(path, { encoding: 'utf-8', flag: 'r' });
+      const fileData = await fs.readFile(util.pathUser, { encoding: 'utf-8', flag: 'r' });
       const jsonData = JSON.parse(fileData).data.find(item => item.email === emailReq);
       if(!jsonData) {
         res.send(JSON.stringify({
@@ -48,8 +45,8 @@ router.post('/signin', (req, res, next) => {
       }
       else {
         const { password, ...data } = jsonData;
-        const mathchPassword = await bcrypt.compare(passwordReq, password);
-        if(!mathchPassword) {
+        const matchPassword = await bcrypt.compare(passwordReq, password);
+        if(!matchPassword) {
           res.send(JSON.stringify({
             code : 401
           }));
@@ -68,39 +65,63 @@ router.post('/signin', (req, res, next) => {
       }));
     }
   })();
-
 });
 
 router.post('/signup', (req, res, next) => {
-  let dataReq = req.body;
+  let { token, email : emailReq, nickname : nicknameReq, password : passwordReq } = req.body;
+
+  if(token !== util.token) {
+    res.send(JSON.stringify({
+      code : 403
+    }));
+    return;
+  }
 
   ( async () => {
     try {
-      const hashedPassword = await bcrypt.hash(dataReq.password, 10);
-      const fileData = await fs.readFile(path, { encoding: 'utf-8', flag: 'r' });
+      const fileData = await fs.readFile(util.pathUser, { encoding: 'utf-8', flag: 'r' });
       const { lastid, data } = JSON.parse(fileData);
-      const updatedFileData = { 
-        lastid : lastid + 1, 
-        data : [ 
-          ...data, 
-          { 
-            id: lastid + 1, 
-            ...dataReq, 
-            password : hashedPassword,
-            grade : 0,
-            like : [],
+      const isValidEmail = data.findIndex(item => item.email === emailReq) == -1;
+      const isValidNickname = data.findIndex(item => item.nickname === nicknameReq) == -1;
+      if(isValidEmail && isValidNickname) {
+        const hashedPassword = await bcrypt.hash(passwordReq, 10);
+        const newData = {
+          id: lastid + 1, 
+          email : emailReq,
+          password : '0',
+          nickname: nicknameReq,
+          grade : 2,
+          like : {
+            boardgame : [],
             review : [],
-            post :[]
-          }
-        ]
-      };
-      await fs.writeFile(path, JSON.stringify(updatedFileData, null, 2), {
-          encoding: 'utf-8',
-          flag: 'w'
-      });
-      res.send(JSON.stringify({
-        code : 200
-      }));
+            post : []
+          },
+          review : [],
+          post :[],
+          comment : []
+        }
+        const updatedFileData = { 
+          lastid : lastid + 1, 
+          data : [ 
+            ...data, 
+            { 
+              ...newData,
+              password : hashedPassword,
+            }
+          ]
+        };
+        await fs.writeFile(util.pathUser, JSON.stringify(updatedFileData, null, 2), { encoding: 'utf-8', flag: 'w' });
+        res.send(JSON.stringify({
+          code : 200,
+          data : newData
+        }));
+      }
+      else {
+        res.send(JSON.stringify({
+          code : 409,
+          data : isValidEmail ? 1 : isValidNickname ? 0 : 2
+        }));
+      }
     } catch (error) {
       console.log(error);
       res.send(JSON.stringify({
@@ -109,51 +130,12 @@ router.post('/signup', (req, res, next) => {
       }));
     }
   })();
-
-});
-
-router.delete('/delete', (req, res, next) => {
-  let idReq = parseInt(req.body.id);
-  let passwordReq = req.body.password;
-
-  ( async () => {
-    try {
-      const fileData = await fs.readFile(path, { encoding: 'utf-8', flag: 'r' });
-      const jsonData = JSON.parse(fileData);
-      const deleteUserIndex = jsonData.data.findIndex(item => item.id === idReq);
-      const mathchPassword = await bcrypt.compare(passwordReq, jsonData.data[deleteUserIndex].password);
-      if(!mathchPassword) {
-        res.send(JSON.stringify({
-          code : 401
-        }));
-      }
-      else {
-        jsonData.data[deleteUserIndex] = {
-          ...jsonData.data[deleteUserIndex],
-          email : "-",
-          password : "-",
-          nickname : "탈퇴한 회원",
-          grade : -1
-        }
-        await fs.writeFile(path, JSON.stringify(jsonData, null, 2), { encoding: 'utf-8', flag: 'w' });
-        res.send(JSON.stringify({
-          code : 200
-        }));
-      }
-    } catch (error) {
-      res.send(JSON.stringify({
-        code : 404,
-        error
-      }));
-    }
-  })();
-
 });
 
 router.get('/check/email/:email', (req, res, next) => {
   let email = req.params.email;
 
-  fs.readFile(path, { encoding: 'utf-8', flag: 'r' })
+  fs.readFile(util.pathUser, { encoding: 'utf-8', flag: 'r' })
   .then(data => {
     if(JSON.parse(data).data.findIndex(item => item.email === email) == -1) {
       res.send(JSON.stringify({
@@ -177,7 +159,7 @@ router.get('/check/email/:email', (req, res, next) => {
 router.get('/check/nickname/:nickname', (req, res, next) => {
   let nickname = req.params.nickname;
 
-  fs.readFile(path, { encoding: 'utf-8', flag: 'r' })
+  fs.readFile(util.pathUser, { encoding: 'utf-8', flag: 'r' })
   .then(data => {
     if(JSON.parse(data).data.findIndex(item => item.nickname === nickname) == -1) {
       res.send(JSON.stringify({
@@ -196,6 +178,51 @@ router.get('/check/nickname/:nickname', (req, res, next) => {
       error
     }));
   })
+});
+
+router.delete('/delete', (req, res, next) => {
+  let { token, id : idReq, password : passwordReq} = req.body;
+
+  if(token !== util.token) {
+    res.send(JSON.stringify({
+        code : 403
+    }));
+    return;
+  }
+
+  ( async () => {
+    try {
+      const userFileData = await fs.readFile(util.pathUser, { encoding: 'utf-8', flag: 'r' });
+      const {lastid : userLastId, data : userData} = JSON.parse(userFileData);
+      const deleteUserIndex = userData.findIndex(item => item.id === idReq);
+      const matchPassword = await bcrypt.compare(passwordReq, userData[deleteUserIndex].password);
+      if(!matchPassword) {
+        res.send(JSON.stringify({
+          code : 401
+        }));
+      }
+      else {
+        const reviewFileData = await fs.readFile(util.pathReview, { encoding: 'utf-8', flag: 'r' });
+        const {lastid : reviewLastId, data : reviewData} = JSON.parse(reviewFileData);
+        for(var i = 0; i < reviewData.length; i++) {
+          if(userData[deleteUserIndex].review.indexOf(reviewData[i].id) != -1) {
+            reviewData[i].nickname = '(탈퇴한 회원)';
+          }
+        }
+        await fs.writeFile(util.pathReview, JSON.stringify({lastid : reviewLastId, data : reviewData}, null, 2), { encoding: 'utf-8', flag: 'w' });
+        userData.splice(deleteUserIndex, 1);
+        await fs.writeFile(util.pathUser, JSON.stringify({lastid : userLastId, data : userData}, null, 2), { encoding: 'utf-8', flag: 'w' });
+        res.send(JSON.stringify({
+          code : 200
+        }));
+      }
+    } catch (error) {
+      res.send(JSON.stringify({
+        code : 404,
+        error
+      }));
+    }
+  })();
 });
 
 

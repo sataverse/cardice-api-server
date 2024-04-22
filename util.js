@@ -1,4 +1,10 @@
 module.exports = {
+    token : 'hwQOaL12@i*DIi-_zws-DMV*vMrCu0YiI9JV*=JG7-IaRf3tot',
+    pathGame : './public/json/boardgame.json',
+    pathUser : './public/json/user.json',
+    pathReview : './public/json/review.json',
+    pathPost : './public/json/post.json',
+    pathSlider : './public/json/sliderlist.json',
     updateFile : async (fs, path, data) => {
         try {
             const fileData = await fs.readFile(path, {
